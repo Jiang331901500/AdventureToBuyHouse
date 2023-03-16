@@ -220,12 +220,9 @@ class Game {
             result.success = false;
             result.score -= 50;
             result.comment += '很不幸，你选中的楼盘出现了开发商违约的情况，你无法拿到房产证。\n';
-        } else if (event < 0.5) {
-            //30 % 的概率发生贷款利率上涨
-            if (player.payment === '按揭') { //如果玩家选择了按揭付款
-                result.score -= 20; //扣分20 分
-                result.comment += '很遗憾，你申请贷款时遇到了利率上涨的情况，你需要多还一些利息。\n';
-            }
+        } else if (event < 0.5 && player.payment === '按揭') { //30 % 的概率发生贷款利率上涨，如果玩家选择了按揭付款
+            result.score -= 20; //扣分20 分
+            result.comment += '很遗憾，你申请贷款时遇到了利率上涨的情况，你需要多还一些利息。\n';
         } else if (event < 0.95) { //45% 的概率发生装修质量差
             result.score -= 10; //扣分10 分
             result.comment += '有点可惜，你入住后发现装修质量不太好，有些地方需要重新修缮。\n';
