@@ -315,6 +315,9 @@
             let p = document.createElement('p'); // 创建一个段落元素
             p.textContent = data.comment; // 设置段落元素的文本内容为字符串
             resultText.appendChild(p); // 将段落元素添加到结果文本元素中 
+            p = document.createElement('p');
+            p.textContent = '您的得分：' + data.score;
+            resultText.appendChild(p); // 将段落元素添加到结果文本元素中 
             switchView(result); // 切换到结果界面 
         });
     </script>

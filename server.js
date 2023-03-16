@@ -400,7 +400,7 @@ class Game {
         let result = {}; // 结果对象，包含是否成功买到房子、评分和评语等属性
         result.success = true; // 默认为成功买到房子
         result.score = 100; // 默认满分
-        result.comment = ''; // 评语
+        result.comment = player.name + '老铁，'; // 评语开头加称谓
 
         // 根据不同的随机事件和玩家选择，修改结果对象的属性
         let event = Math.random(); // 随机数，用来模拟随机事件发生的概率
