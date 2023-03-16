@@ -17,8 +17,7 @@ const io = require('socket.io')(server);
 // 定义一些游戏变量和常量
 const CITY_LIST = ['北京', '上海', '广州', '深圳']; // 城市列表
 // ['程序员', '老师', '医生', '律师']; // 职业列表
-const JOB_LIST = [
-    {
+const JOB_LIST = [{
         name: "程序员",
         income: "20000"
     },
@@ -38,65 +37,238 @@ const JOB_LIST = [
 const HOUSE_LIST = { // 楼盘列表，每个城市有四个楼盘，每个楼盘有两种户型，每种户型有不同的价格和面积
     北京: [{
             name: '朝阳区某小区',
-            type1: {
-                type: '一室一厅',
-                price: 100000,
-                area: 50
-            },
-            type2: {
-                type: '两室一厅',
-                price: 150000,
-                area: 70
-            }
+            types: [{
+                    type: '一室一厅',
+                    price: 100000,
+                    area: 50
+                },
+                {
+                    type: '两室一厅',
+                    price: 150000,
+                    area: 70
+                }
+            ]
         },
         {
             name: '海淀区某小区',
-            type1: {
-                type: '一室一厅',
-                price: 80000,
-                area: 40
-            },
-            type2: {
-                type: '两室一厅',
-                price: 120000,
-                area: 60
-            }
+            types: [{
+                    type: '一室一厅',
+                    price: 80000,
+                    area: 40
+                },
+                {
+                    type: '两室一厅',
+                    price: 120000,
+                    area: 60
+                }
+            ]
         },
         {
             name: '昌平区某小区',
-            type1: {
-                type: '一室一卫',
-                price: 50000,
-                area: 30
-            },
-            type2: {
-                type: '一室一厅',
-                price: 70000,
-                area: 50
-            }
+            types: [{
+                    type: '一室一卫',
+                    price: 50000,
+                    area: 30
+                },
+                {
+                    type: '一室一厅',
+                    price: 70000,
+                    area: 50
+                }
+            ]
         },
         {
             name: '大兴区某小区',
-            type1: {
-                type: '一居室',
-                price: 40000,
-                area: 20
-            },
-            type2: {
-                type: '一室一厅',
-                price: 60000,
-                area: 40
-            }
+            types: [{
+                    type: '一居室',
+                    price: 40000,
+                    area: 20
+                },
+                {
+                    type: '一室一厅',
+                    price: 60000,
+                    area: 40
+                }
+            ]
         }
     ],
-    上海: [
-        // 省略其他城市的数据，格式同上
-    ]
+    上海: [{
+            name: '浦东新区某小区',
+            types: [{
+                    type: '一室一厅',
+                    price: 300000,
+                    area: 50
+                },
+                {
+                    type: '两室一厅',
+                    price: 450000,
+                    area: 70
+                }
+            ]
+        },
+        {
+            name: '徐汇区某小区',
+            types: [{
+                    type: '一室一厅',
+                    price: 250000,
+                    area: 40
+                },
+                {
+                    type: '两室一厅',
+                    price: 400000,
+                    area: 60
+                }
+            ]
+        },
+        {
+            name: '松江区某小区',
+            types: [{
+                    type: '一室一卫',
+                    price: 150000,
+                    area: 30
+                },
+                {
+                    type: '一室一厅',
+                    price: 200000,
+                    area: 50
+                }
+            ]
+        },
+        {
+            name: '青浦区某小区',
+            types: [{
+                    type: '一居室',
+                    price: 100000,
+                    area: 20
+                },
+                {
+                    type: '一室一厅',
+                    price: 150000,
+                    area: 40
+                }
+            ]
+        }
+    ],
+    广州: [{
+            name: "天河区某小区",
+            types: [{
+                    type: "一室一厅",
+                    price: 3500000,
+                    area: 50
+                },
+                {
+                    type: "两室一厅",
+                    price: 5000000,
+                    area: 70
+                },
+            ],
+        },
+        {
+            name: "越秀区某小区",
+            types: [{
+                    type: "一室一厅",
+                    price: 3000000,
+                    area: 40
+
+                },
+                {
+                    type: '两室一厅',
+                    price: 4500000,
+                    area: 60
+                }
+            ]
+        },
+        {
+            name: '番禺区某小区',
+            types: [{
+
+                    type: '一室一卫',
+                    price: 2000000,
+                    area: 30
+                },
+                {
+                    type: "一室一厅",
+                    price: 3000000,
+                    area: 50,
+                },
+            ],
+        },
+        {
+            name: "增城区某小区",
+            types: [{
+                    type: "一居室",
+                    price: 1000000,
+                    area: 20,
+                },
+                {
+                    type: "一室一厅",
+                    price: 1500000,
+                    area: 40,
+                },
+            ]
+        },
+    ],
+    深圳: [{
+            name: "南山区某小区",
+            types: [{
+                    type: "一室一厅",
+                    price: 6000000,
+                    area: 50
+                },
+                {
+                    type: "两室一厅",
+                    price: 9000000,
+                    area: 70
+                }
+            ]
+        },
+        {
+            name: '福田区某小区',
+            types: [{
+                    type: '一室一厅',
+                    price: 5000000,
+                    area: 40
+                },
+                {
+                    type: "两室一厅",
+                    price: 8000000,
+                    area: 60,
+                },
+            ],
+        },
+        {
+            name: "罗湖区某小区",
+            types: [{
+                    type: "一室一卫",
+                    price: 4000000,
+                    area: 30,
+                },
+                {
+                    type: "一室一厅",
+                    price: 6000000,
+                    area: 50,
+                },
+            ],
+        },
+        {
+            name: "龙岗区某小区",
+            types: [{
+                    type: '一居室',
+                    price: 3000000,
+                    area: 20
+                },
+                {
+                    type: "一室一厅",
+                    price: 4000000,
+                    area: 40
+                },
+            ],
+        },
+    ],
 };
 // ['全款', '按揭']; // 支付方式列表
 const PAYMENT_LIST = {
-    北京: [
-        {
+    北京: [{
             name: '全款',
             rate: 0
         },
@@ -105,8 +277,25 @@ const PAYMENT_LIST = {
             rate: 6.2
         }
     ],
-    上海: [
+    上海: [{
+            name: '全款',
+            rate: 0
+        },
         {
+            name: '按揭',
+            rate: 5.2
+        }
+    ],
+    广州: [{
+            name: '全款',
+            rate: 0
+        },
+        {
+            name: '按揭',
+            rate: 5.3
+        }
+    ],
+    深圳: [{
             name: '全款',
             rate: 0
         },

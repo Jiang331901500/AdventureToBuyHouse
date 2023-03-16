@@ -258,30 +258,37 @@
                     '<th>总价</th>' + 
                     '<th></th></tr>'; // 重置楼盘表格元素的内容为表头行
             for (let house of data) { // 遍历楼盘列表数据中的每个楼盘对象
-                let tr = document.createElement('tr'); // 创建一个表格行元素
-                let td1 = document.createElement('td'); // 创建一个表格单元格元素，用来显示楼盘名称
-                td1.textContent = house.name;
-                let td2 = document.createElement('td'); // 创建一个表格单元格元素，用来显示房屋类型
-                td2.textContent = house.type1.type;
-                let td3 = document.createElement('td'); // 创建一个表格单元格元素，用来显示建筑面积
-                td3.textContent = house.type1.area + '平方米';
-                let td4 = document.createElement('td'); // 创建一个表格单元格元素，用来显示总价
-                td4.textContent = house.type1.price + '万元';
-                let td5 = document.createElement('td'); // 创建一个表格单元格元素，用来显示购买按钮
-                let button = document.createElement('button'); // 创建一个按钮元素
-                button.textContent = '购买'; // 设置按钮元素的文本内容为“购买”
-                button.addEventListener('click', () => { // 给按钮元素添加点击事件监听器，向服务器发送选择的楼盘数据 
-                    socket.emit('house', {
-                        house: house
+                for (let type of house.types) {
+                    let tr = document.createElement('tr'); // 创建一个表格行元素
+                    let td1 = document.createElement('td'); // 创建一个表格单元格元素，用来显示楼盘名称
+                    td1.textContent = house.name;
+                    let td2 = document.createElement('td'); // 创建一个表格单元格元素，用来显示房屋类型
+                    td2.textContent = type.type;
+                    let td3 = document.createElement('td'); // 创建一个表格单元格元素，用来显示建筑面积
+                    td3.textContent = type.area + '平方米';
+                    let td4 = document.createElement('td'); // 创建一个表格单元格元素，用来显示总价
+                    td4.textContent = type.price + '万元';
+                    let td5 = document.createElement('td'); // 创建一个表格单元格元素，用来显示购买按钮
+                    let button = document.createElement('button'); // 创建一个按钮元素
+                    button.textContent = '购买'; // 设置按钮元素的文本内容为“购买”
+                    button.addEventListener('click', () => { // 给按钮元素添加点击事件监听器，向服务器发送选择的楼盘数据 
+                        socket.emit('house', {
+                            house: {
+                                name: house.name,
+                                type: type.type,
+                                area: type.area,
+                                price: type.price
+                            }
+                        });
                     });
-                });
-                td5.appendChild(button); // 将按钮元素添加到表格单元格元素中
-                tr.appendChild(td1); // 将表格单元格元素添加到表格行元素中
-                tr.appendChild(td2);
-                tr.appendChild(td3);
-                tr.appendChild(td4);
-                tr.appendChild(td5);
-                houseList.appendChild(tr); // 将表格行元素添加到楼盘表格元素中 
+                    td5.appendChild(button); // 将按钮元素添加到表格单元格元素中
+                    tr.appendChild(td1); // 将表格单元格元素添加到表格行元素中
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    tr.appendChild(td4);
+                    tr.appendChild(td5);
+                    houseList.appendChild(tr); // 将表格行元素添加到楼盘表格元素中 
+                }
             }
             switchView(houseChoice); // 切换到房子选择界面 
         });
