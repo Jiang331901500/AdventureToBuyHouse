@@ -1,0 +1,314 @@
+<!-- index.html -->
+<!-- 创建一个网页客户端，用来显示游戏界面和交互 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>买房大冒险</title>
+    <style>
+        /* 设置全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 设置容器元素样式 */
+        .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        /* 设置标题元素样式 */
+        h1 {
+            text-align: center;
+        }
+
+        /* 设置表单元素样式 */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 设置输入框元素样式 */
+        input {
+            width: 200px;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+
+        /* 设置按钮元素样式 */
+        button {
+            width: 100px;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+
+        /* 设置列表元素样式 */
+        ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 设置列表项元素样式 */
+        li {
+            width: 200px;
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid black;
+            margin-bottom: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        /* 设置表格元素样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* 设置表格行元素样式 */
+        tr {
+            border: 1px solid black;
+        }
+
+        /* 设置表格单元格元素样式 */
+        td {
+            width: 20%;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        /* 设置隐藏类样式 */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <!-- 容器元素，用来显示不同的游戏界面 -->
+        <div id="welcome">
+            <!-- 欢迎界面，用来输入姓名和性别 -->
+            <h1>欢迎来到买房大冒险</h1>
+            <p>在这个游戏中，你将扮演一个想要在中国买房的人，你需要在不同的城市、职业、楼盘和支付方式中做出选择，并且应对可能发生的各种随机事件。最后你会得到一个评分和评语，反映你买房过程中的表现。</p>
+            <p>请先输入你的姓名和性别：</p>
+            <form id="nameAndGenderForm">
+                <!-- 表单元素，用来提交姓名和性别 -->
+                姓名：<input type="text" id="nameInput" required><br> <!-- 输入框元素，用来输入姓名 -->
+                性别：<input type="radio" id="maleRadio" name="gender" value="男" checked><label for="maleRadio">男</label>
+                <!-- 单选框元素，用来选择性别 -->
+                <input type="radio" id="femaleRadio" name="gender" value="女"><label for="femaleRadio">女</label><br>
+                <button type="submit" id="startButton">开始游戏</button> <!-- 按钮元素，用来提交表单并开始游戏 -->
+            </form>
+        </div>
+
+        <div id="cityChoice">
+            <!-- 城市选择界面，用来显示城市列表并让用户选择城市 -->
+            <h1>请选择你想要买房的城市：</h1>
+            <ul id="cityList">
+                <!-- 列表元素，用来显示城市列表 -->
+                <!-- 城市列表的内容将由服务器动态生成并发送到客户端 -->
+            </ul>
+        </div>
+
+        <div id="jobChoice">
+            <!-- 职业选择界面，用来显示职业列表并让用户选择职业 -->
+            <h1>请选择你在<span id="cityName"></span>的职业：</h1> <!-- 城市名称将由服务器动态生成并发送到客户端 -->
+            <ul id="jobList">
+                <!-- 列表元素，用来显示职业列表 -->
+                <!-- 职业列表的内容将由服务器动态生成并发送到客户端 -->
+            </ul>
+        </div>
+
+        <div id="houseChoice">
+            <!-- 房子选择界面，用来显示楼盘列表并让用户选择房子 -->
+            <h1>请选择你想要买的房子：</h1>
+            <table id="houseList">
+                <!-- 表格元素，用来显示楼盘列表 -->
+                <tr>
+                    <!-- 表格行元素，用来显示表头 -->
+                    <th>楼盘名称</th> <!-- 表格头元素，用来显示列名 -->
+                    <th>房屋类型</th>
+                    <th>建筑面积</th>
+                    <th>总价</th>
+                    <th></th>
+                </tr>
+                <!-- 表格其他行的内容将由服务器动态生成并发送到客户端 -->
+            </table>
+        </div>
+
+        <div id="paymentChoice">
+            <!-- 支付方式选择界面，用来显示支付方式列表并让用户选择支付方式 -->
+            <h1>请选择你想要使用的支付方式：</h1>
+            <ul id="paymentList">
+                <!-- 列表元素，用来显示支付方式列表 -->
+                <!-- 支付方式列表的内容将由服务器动态生成并发送到客户端 -->
+            </ul>
+        </div>
+
+        <div id="result">
+            <!-- 结果界面，用来显示游戏结果和评分 -->
+            <h1>游戏结束</h1>
+            <p id="resultText">
+                <!-- 段落元素，用来显示结果文本 -->
+                <!-- 结果文本的内容将由服务器动态生成并发送到客户端 -->
+            </p>
+        </div>
+
+    </div>
+
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+        // 创建一个socket对象
+        let socket = io();
+
+        // 获取各个界面和元素的引用
+        let welcome = document.getElementById('welcome');
+        let nameAndGenderForm = document.getElementById('nameAndGenderForm');
+        let nameInput = document.getElementById('nameInput');
+        let maleRadio = document.getElementById('maleRadio');
+        let femaleRadio = document.getElementById('femaleRadio');
+        let cityChoice = document.getElementById('cityChoice');
+        let cityName = document.getElementById('cityName');
+        let cityList = document.getElementById('cityList');
+        let jobChoice = document.getElementById('jobChoice');
+        let jobList = document.getElementById('jobList');
+        let houseChoice = document.getElementById('houseChoice');
+        let houseList = document.getElementById('houseList');
+        let paymentChoice = document.getElementById('paymentChoice');
+        let paymentList = document.getElementById('paymentList');
+        let result = document.getElementById('result');
+        let resultText = document.getElementById('resultText');
+
+        // 定义一个函数，用来切换不同的游戏界面
+        function switchView(view) {
+            // 隐藏所有的界面
+            welcome.style.display = 'none';
+            cityChoice.style.display = 'none';
+            jobChoice.style.display = 'none';
+            houseChoice.style.display = 'none';
+            paymentChoice.style.display = 'none';
+            result.style.display = 'none';
+
+            // 显示指定的界面
+            view.style.display = 'block';
+        }
+
+        // 初始时显示欢迎界面
+        switchView(welcome);
+
+        // 监听表单提交事件，阻止默认行为并向服务器发送姓名和性别数据
+        nameAndGenderForm.addEventListener('submit', e => {
+            e.preventDefault();
+            socket.emit('nameAndGender', {
+                name: nameInput.value,
+                gender: maleRadio.checked ? maleRadio.value : femaleRadio.value
+            });
+        });
+
+        // 监听服务器发送的城市列表数据，并动态生成城市列表元素
+        socket.on('cityList', data => {
+            cityList.innerHTML = ''; // 清空城市列表元素的内容
+            for (let city of data) { // 遍历城市列表数据中的每个城市对象
+                let li = document.createElement('li'); // 创建一个列表项元素
+                li.textContent = city; // 设置列表项元素的文本内容为城市名称
+                li.addEventListener('click', () => { // 给列表项元素添加点击事件监听器，向服务器发送选择的城市数据 
+                    socket.emit('city', {
+                        city: city
+                    });
+                });
+                cityList.appendChild(li); // 将列表项元素添加到城市列表元素中 
+            }
+            switchView(cityChoice); // 切换到城市选择界面 
+        });
+
+        // 监听服务器发送的职业列表数据，并动态生成职业列表元素
+        socket.on('jobList', data => {
+            jobList.innerHTML = ''; // 清空职业列表元素的内容
+            for (let job of data) { // 遍历职业列表数据中的每个职业对象
+                let li = document.createElement('li'); // 创建一个列表项元素
+                li.textContent = job.name + '（月收入：' + job.income + '元）'; // 设置列表项元素的文本内容为职业名称和月收入
+                li.addEventListener('click', () => { // 给列表项元素添加点击事件监听器，向服务器发送选择的职业数据 
+                    socket.emit('job', {
+                        job: job
+                    });
+                });
+                jobList.appendChild(li); // 将列表项元素添加到职业列表元素中 
+            }
+            cityName.textContent = data[0].city; // 设置城市名称元素的文本内容为第一个职业对象中的城市属性
+            switchView(jobChoice); // 切换到职业选择界面 
+        });
+
+        // 监听服务器发送的楼盘列表数据，并动态生成楼盘表格行元素
+        socket.on('houseList', data => {
+            houseList.innerHTML =
+                '<tr><th>楼盘名称</th><th>房屋类型</th><th>建筑面积</th><th>总价</th><th></th></tr>'; // 重置楼盘表格元素的内容为表头行
+            for (let house of data) { // 遍历楼盘列表数据中的每个楼盘对象
+                let tr = document.createElement('tr'); // 创建一个表格行元素
+                let td1 = document.createElement('td'); // 创建一个表格单元格元素，用来显示楼盘名称
+                td1.textContent = house.name;
+                let td2 = document.createElement('td'); // 创建一个表格单元格元素，用来显示房屋类型
+                td2.textContent = house.type;
+                let td3 = document.createElement('td'); // 创建一个表格单元格元素，用来显示建筑面积
+                td3.textContent = house.area + '平方米';
+                let td4 = document.createElement('td'); // 创建一个表格单元格元素，用来显示总价
+                td4.textContent = house.price + '万元';
+                let td5 = document.createElement('td'); // 创建一个表格单元格元素，用来显示购买按钮
+                let button = document.createElement('button'); // 创建一个按钮元素
+                button.textContent = '购买'; // 设置按钮元素的文本内容为“购买”
+                button.addEventListener('click', () => { // 给按钮元素添加点击事件监听器，向服务器发送选择的楼盘数据 
+                    socket.emit('house', {
+                        house: house
+                    });
+                });
+                td5.appendChild(button); // 将按钮元素添加到表格单元格元素中
+                tr.appendChild(td1); // 将表格单元格元素添加到表格行元素中
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
+                houseList.appendChild(tr); // 将表格行元素添加到楼盘表格元素中 
+            }
+            switchView(houseChoice); // 切换到房子选择界面 
+        });
+
+        // 监听服务器发送的支付方式列表数据，并动态生成支付方式列表元素
+        socket.on('paymentList', data => {
+            paymentList.innerHTML = ''; // 清空支付方式列表元素的内容
+            for (let payment of data) { // 遍历支付方式列表数据中的每个支付方式对象
+                let li = document.createElement('li'); // 创建一个列表项元素
+                li.textContent = payment.name + '（利率：' + payment.rate + '%）'; // 设置列表项元素的文本内容为支付方式名称和利率
+                li.addEventListener('click', () => { // 给列表项元素添加点击事件监听器，向服务器发送选择的支付方式数据 
+                    socket.emit('payment', {
+                        payment: payment
+                    });
+                });
+                paymentList.appendChild(li); // 将列表项元素添加到支付方式列表元素中 
+            }
+            switchView(paymentChoice); // 切换到支付方式选择界面 
+        });
+
+        // 监听服务器发送的结果数据，并动态生成结果文本元素
+        socket.on('result', data => {
+            resultText.innerHTML = ''; // 清空结果文本元素的内容
+            for (let line of data) { // 遍历结果数据中的每个字符串
+                let p = document.createElement('p'); // 创建一个段落元素
+                p.textContent = line; // 设置段落元素的文本内容为字符串
+                resultText.appendChild(p); // 将段落元素添加到结果文本元素中 
+            }
+            switchView(result); // 切换到结果界面 
+        });
+    </script>
+</body>
+
+</html>
