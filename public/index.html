@@ -167,7 +167,7 @@
 
     </div>
 
-    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="../socket.io/socket.io.js"></script>
     <script>
         // 创建一个socket对象
         let socket = io();
@@ -252,17 +252,21 @@
         // 监听服务器发送的楼盘列表数据，并动态生成楼盘表格行元素
         socket.on('houseList', data => {
             houseList.innerHTML =
-                '<tr><th>楼盘名称</th><th>房屋类型</th><th>建筑面积</th><th>总价</th><th></th></tr>'; // 重置楼盘表格元素的内容为表头行
+                '<tr><th>楼盘名称</th>' + 
+                    '<th>房屋类型</th>' +
+                    '<th>建筑面积</th>' +
+                    '<th>总价</th>' + 
+                    '<th></th></tr>'; // 重置楼盘表格元素的内容为表头行
             for (let house of data) { // 遍历楼盘列表数据中的每个楼盘对象
                 let tr = document.createElement('tr'); // 创建一个表格行元素
                 let td1 = document.createElement('td'); // 创建一个表格单元格元素，用来显示楼盘名称
                 td1.textContent = house.name;
                 let td2 = document.createElement('td'); // 创建一个表格单元格元素，用来显示房屋类型
-                td2.textContent = house.type;
+                td2.textContent = house.type1.type;
                 let td3 = document.createElement('td'); // 创建一个表格单元格元素，用来显示建筑面积
-                td3.textContent = house.area + '平方米';
+                td3.textContent = house.type1.area + '平方米';
                 let td4 = document.createElement('td'); // 创建一个表格单元格元素，用来显示总价
-                td4.textContent = house.price + '万元';
+                td4.textContent = house.type1.price + '万元';
                 let td5 = document.createElement('td'); // 创建一个表格单元格元素，用来显示购买按钮
                 let button = document.createElement('button'); // 创建一个按钮元素
                 button.textContent = '购买'; // 设置按钮元素的文本内容为“购买”
@@ -301,11 +305,9 @@
         // 监听服务器发送的结果数据，并动态生成结果文本元素
         socket.on('result', data => {
             resultText.innerHTML = ''; // 清空结果文本元素的内容
-            for (let line of data) { // 遍历结果数据中的每个字符串
-                let p = document.createElement('p'); // 创建一个段落元素
-                p.textContent = line; // 设置段落元素的文本内容为字符串
-                resultText.appendChild(p); // 将段落元素添加到结果文本元素中 
-            }
+            let p = document.createElement('p'); // 创建一个段落元素
+            p.textContent = data.comment; // 设置段落元素的文本内容为字符串
+            resultText.appendChild(p); // 将段落元素添加到结果文本元素中 
             switchView(result); // 切换到结果界面 
         });
     </script>

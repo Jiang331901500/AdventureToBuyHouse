@@ -16,15 +16,35 @@ const io = require('socket.io')(server);
 
 // 定义一些游戏变量和常量
 const CITY_LIST = ['北京', '上海', '广州', '深圳']; // 城市列表
-const JOB_LIST = ['程序员', '老师', '医生', '律师']; // 职业列表
+// ['程序员', '老师', '医生', '律师']; // 职业列表
+const JOB_LIST = [
+    {
+        name: "程序员",
+        income: "20000"
+    },
+    {
+        name: "老师",
+        income: "15000"
+    },
+    {
+        name: "医生",
+        income: "25000"
+    },
+    {
+        name: "律师",
+        income: "18000"
+    }
+];
 const HOUSE_LIST = { // 楼盘列表，每个城市有四个楼盘，每个楼盘有两种户型，每种户型有不同的价格和面积
     北京: [{
             name: '朝阳区某小区',
             type1: {
+                type: '一室一厅',
                 price: 100000,
                 area: 50
             },
             type2: {
+                type: '两室一厅',
                 price: 150000,
                 area: 70
             }
@@ -32,10 +52,12 @@ const HOUSE_LIST = { // 楼盘列表，每个城市有四个楼盘，每个楼�
         {
             name: '海淀区某小区',
             type1: {
+                type: '一室一厅',
                 price: 80000,
                 area: 40
             },
             type2: {
+                type: '两室一厅',
                 price: 120000,
                 area: 60
             }
@@ -43,10 +65,12 @@ const HOUSE_LIST = { // 楼盘列表，每个城市有四个楼盘，每个楼�
         {
             name: '昌平区某小区',
             type1: {
+                type: '一室一卫',
                 price: 50000,
                 area: 30
             },
             type2: {
+                type: '一室一厅',
                 price: 70000,
                 area: 50
             }
@@ -54,10 +78,12 @@ const HOUSE_LIST = { // 楼盘列表，每个城市有四个楼盘，每个楼�
         {
             name: '大兴区某小区',
             type1: {
+                type: '一居室',
                 price: 40000,
                 area: 20
             },
             type2: {
+                type: '一室一厅',
                 price: 60000,
                 area: 40
             }
@@ -67,8 +93,29 @@ const HOUSE_LIST = { // 楼盘列表，每个城市有四个楼盘，每个楼�
         // 省略其他城市的数据，格式同上
     ]
 };
-const PAYMENT_LIST = ['全款', '按揭']; // 支付方式列表
-
+// ['全款', '按揭']; // 支付方式列表
+const PAYMENT_LIST = {
+    北京: [
+        {
+            name: '全款',
+            rate: 0
+        },
+        {
+            name: '按揭',
+            rate: 6.2
+        }
+    ],
+    上海: [
+        {
+            name: '全款',
+            rate: 0
+        },
+        {
+            name: '按揭',
+            rate: 5.2
+        }
+    ]
+};
 // 定义一个玩家类，用来存储玩家的信息和状态
 class Player {
     constructor(socket) {
@@ -145,7 +192,7 @@ class Game {
         if (player) {
             player.house = data.house;
             console.log(`Player ${player.name} chose ${player.house.name} (${player.house.type})`);
-            socket.emit('paymentList', PAYMENT_LIST); // 向该玩家发送支付方式列表让其选择支付方式 
+            socket.emit('paymentList', PAYMENT_LIST[player.city]); // 向该玩家发送支付方式列表让其选择支付方式 
         }
     }
 
@@ -169,21 +216,20 @@ class Game {
         // 根据不同的随机事件和玩家选择，修改结果对象的属性
         let event = Math.random(); // 随机数，用来模拟随机事件发生的概率
 
-        if (event < 0.1) { // 10% 的概率发生开发商违约
+        if (event < 0.2) { // 20% 的概率发生开发商违约
             result.success = false;
             result.score -= 50;
             result.comment += '很不幸，你选中的楼盘出现了开发商违约的情况，你无法拿到房产证。\n';
-        } else if (event < 0.2) {
-            / /
-            20 % 的概率发生贷款利率上涨
+        } else if (event < 0.5) {
+            //30 % 的概率发生贷款利率上涨
             if (player.payment === '按揭') { //如果玩家选择了按揭付款
                 result.score -= 20; //扣分20 分
                 result.comment += '很遗憾，你申请贷款时遇到了利率上涨的情况，你需要多还一些利息。\n';
             }
-        } else if (event < 0.3) { //30% 的概率发生装修质量差
+        } else if (event < 0.95) { //45% 的概率发生装修质量差
             result.score -= 10; //扣分10 分
             result.comment += '有点可惜，你入住后发现装修质量不太好，有些地方需要重新修缮。\n';
-        } else { //40% 的概率没有任何随机事件发生
+        } else { //5% 的概率没有任何随机事件发生
             result.comment += '恭喜你，一切顺利，你成功买到并入住了心仪的房子。\n';
         }
 
