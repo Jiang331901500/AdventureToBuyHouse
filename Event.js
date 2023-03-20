@@ -135,7 +135,6 @@ class EventFactory {
     }
 
     actEvent(info, event, into_hist) {
-        info['origin_money'] = info.player.money;
         event.act(info);
         event.repeated_time++;
         event.trigger_time = info.player.time;

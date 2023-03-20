@@ -1,5 +1,4 @@
 var GameController = require('./GameController.js');
-var CONF = require('./conf.js');
 // ---------------------------------test
 var info = {
     mode : 'self',
@@ -12,7 +11,7 @@ var info = {
     },
 };
 
-let controller = new GameController.GameController(info, CONF);
+let controller = new GameController.GameController(info);
 console.log("#1 ---------------");
 let buy_info = controller.nextRound();
 console.log(buy_info);

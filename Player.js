@@ -1,6 +1,6 @@
 
 class Player {
-    constructor(name, age, gender, career, conf) {
+    constructor(name, age, gender, career, game_controller) {
         this.name = name ;
         this.age = age;
         this.gender = gender;
@@ -8,6 +8,7 @@ class Player {
         this.money = 10000000;
         this.assets = {};
         this.time = 0; // 游戏开始经过的月份数
+        this.game_controller = game_controller; // 为了方便事件逻辑控制各种参数，这里直接把game_controller丢给player
     }
 
     buy(asset) {

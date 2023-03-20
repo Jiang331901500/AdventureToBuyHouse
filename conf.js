@@ -95,8 +95,7 @@ var SPECIAL_EVENTS_LIST = [
         repeatable_time : 1,
         optional : false,
         getDescription : function (info) {
-            let loss = Math.min(info.origin_money, 100000)
-            return "投资东南亚赌博网站，乙方圈钱跑路，损失￥" + loss;
+            return "投资东南亚赌博网站，乙方圈钱跑路，损失￥" + info.loss_money;
         },
         getResult : function (info) {
             return this.getDescription(info);
@@ -104,8 +103,9 @@ var SPECIAL_EVENTS_LIST = [
         judgeCondition : function (player) {
             return player.money > 500000; // 现金大于50W才会触发
         },
-        act : function (info) {
-            let loss = Math.min(info.player.money, 100000)
+        act : function (info) { // 一个事件的各个方法之间传递参数请使用info
+            let loss = Math.min(info.player.money, 100000);
+            info['loss_money'] = loss;
             info.player.money -= loss;
         }
     },
