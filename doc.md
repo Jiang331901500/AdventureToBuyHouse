@@ -72,8 +72,8 @@ data = {
     month_pass: 3 // 这一轮经过了几个月
 };
 ```
-### playerShareResult
+## playerShareResult
 待定
 
-### playerCommit
+## playerCommit
 待定
