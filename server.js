@@ -35,26 +35,23 @@ class Player {
 // 用来管理游戏逻辑和状态 
 class GameManager {
     constructor() {
-        this.players = []; // 游戏中的玩家列表 
+        this.players = new Map(); // 游戏中的玩家列表 (使用map加速查询)
     }
 
     // 添加一个玩家到游戏中 
     addPlayer(socket) {
         let player = new Player(socket, new GameController.GameController());
-        this.players.push(player);
+        this.players.set(socket.id, player);
     }
 
     // 移除一个玩家从游戏中 
     removePlayer(socket) {
-        let index = this.players.findIndex(p => p.socket.id === socket.id);
-        if (index !== -1) {
-            this.players.splice(index, 1);
-        }
+        this.players.delete(socket.id);
     }
 
     // 根据socket对象找到对应的玩家对象 
     findPlayer(socket) {
-        return this.players.find(p => p.socket.id === socket.id);
+        return this.players.get(socket.id);
     }
 
     // 前后端数据交互接口
