@@ -40,7 +40,7 @@ class GameManager {
 
     // 添加一个玩家到游戏中 
     addPlayer(socket) {
-        let player = new Player(socket, new GameController.GameController());
+        let player = new Player(socket);
         this.players.set(socket.id, player);
     }
 
@@ -62,8 +62,12 @@ class GameManager {
             request_result : 'failed'
         };
         let player = this.findPlayer(socket);
-        if (player && player.initGameController(data)) {
-            ret.request_result = 'ok'
+        if (player) {
+            if (!player.hasOwnProperty('game_controller')) { // 避免控制器重复初始化
+                if (player.initGameController(data)) {
+                    ret.request_result = 'ok';
+                }
+            }
         }
         socket.emit("playerInfoResp", ret);
     }
@@ -75,7 +79,7 @@ class GameManager {
         };
         let player = this.findPlayer(socket);
         if (player) {
-            ret = player.game_controller.processPlayerOder(data)
+            ret = player.game_controller.processPlayerOder(data);
         }
         socket.emit("playerOptionResp", ret);
     }
@@ -86,7 +90,11 @@ class GameManager {
         };
         let player = this.findPlayer(socket);
         if (player) {
-            ret = player.game_controller.nextRound(data)
+            if (player.game_controller.mode === 'manual') { // 手动模式
+                ret = player.game_controller.nextRound();
+            } else {    // 自动模式
+                ret = player.game_controller.nextRoundAuto();
+            }
         }
         socket.emit("playerNextRoundResp", ret);
     }
@@ -95,10 +103,14 @@ class GameManager {
 
     /* 4 - 用户提交评论，需要数据库支持 */
 }
+
+// 创建一个游戏实例
+var game = new GameManager();
+setInterval(function() {
+    console.log("player ontime: " + game.players.size);
+}, 10000);
 // 监听socket连接事件 
 io.on('connection', socket => {
-    // 创建一个游戏实例
-    let game = new GameManager();
     game.addPlayer(socket); //
     // 添加玩家到游戏中 
     socket.on('disconnect', () => {

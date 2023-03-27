@@ -70,7 +70,6 @@ data = {
     events: [],
     assets: [],
     player: {},
-    history: [],
     game_status: "start", // start/running/over
     month_pass: 3 // 这一轮经过了几个月
 };
