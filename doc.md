@@ -14,6 +14,7 @@ data = {
 };
 ```
 ### response
+返回时的topic为 *playerInfoResp*
 ```javascript
 data = {
     request_result : "ok", // failed
@@ -42,6 +43,7 @@ data = {
 };
 ```
 ### response
+返回时的topic为 *playerOptionResp*
 ```javascript
 data = {
     request_result : "ok",
@@ -62,6 +64,7 @@ data = {
 };
 ```
 ### response
+返回时的topic为 *playerNextRoundResp*
 ```javascript
 data = {
     events: [],
