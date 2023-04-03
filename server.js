@@ -56,6 +56,17 @@ class GameManager {
 
     // 前后端数据交互接口
     /* 1 - 首页，表单提交玩家信息：姓名、性别、年龄、职业（含月收入）*/
+    handleGameInfo(socket, data) {
+        let ret = {
+            request_result : 'failed'
+        };
+        let player = this.findPlayer(socket);
+        if (player) {
+            ret.game_info = GameController.GameInfo();
+            ret.request_result = 'ok';
+        }
+        socket.emit("gameInfoResp", ret);
+    }
     /* 后端为该玩家新生成Player对象，随机产出一些起始属性（如现金），游戏控制器开始工作 */
     handlePlayerInfo(socket, data) {
         let ret = {
@@ -71,6 +82,7 @@ class GameManager {
         }
         socket.emit("playerInfoResp", ret);
     }
+
     /* 2 - 游戏中页面：是一个loop直到游戏结束，每次发送玩家请求，控制器返回请求，前端显示返回结果 
            游戏结束时，显示结果页面：显示玩家当前资产状态，可以选择查看历史回顾*/
     handlePlayerOption(socket, data) {
@@ -78,7 +90,7 @@ class GameManager {
             request_result : 'failed'
         };
         let player = this.findPlayer(socket);
-        if (player) {
+        if (player && player.game_controller) {
             ret = player.game_controller.processPlayerOder(data);
         }
         socket.emit("playerOptionResp", ret);
@@ -89,7 +101,7 @@ class GameManager {
             request_result : 'failed'
         };
         let player = this.findPlayer(socket);
-        if (player) {
+        if (player && player.game_controller) {
             if (player.game_controller.mode === 'manual') { // 手动模式
                 ret = player.game_controller.nextRound();
             } else {    // 自动模式
@@ -107,14 +119,17 @@ class GameManager {
 // 创建一个游戏实例
 var game = new GameManager();
 setInterval(function() {
-    console.log("player ontime: " + game.players.size);
+    console.log("player online: " + game.players.size);
 }, 10000);
 // 监听socket连接事件 
 io.on('connection', socket => {
-    game.addPlayer(socket); //
-    // 添加玩家到游戏中 
+    game.addPlayer(socket); //添加玩家到游戏中 
     socket.on('disconnect', () => {
-        game.removePlayer(socket); // 移除玩家从游戏中 
+        game.removePlayer(socket); // 移除玩家 
+    });
+
+    socket.on('gameInfo', data => {
+        game.handleGameInfo(socket, data);
     });
 
     socket.on('playerInfo', data => {

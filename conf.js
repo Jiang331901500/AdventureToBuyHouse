@@ -182,4 +182,41 @@ function ASSET_EVENT_TEMPLATE(asset) {
     }
 }
 
-module.exports = {ASSET_LIST, ASSET_EVENT_TEMPLATE, SPECIAL_EVENTS_LIST};
+var GAME_INFO = {
+    mode_options: {
+        auto: "我命由我不由天模式", 
+        manual: "听天由命躺平模式"
+    },
+    name_length: [1, 64],
+    age_range: [20, 30],
+    gener_options: ["男", "女"],
+    career_options: [
+        {
+            id: "1",
+            name: "程序员",
+            salary: 20000
+        },
+        {
+            id: "2",
+            name: "医生",
+            salary: 22000
+        },
+        {
+            id: "3",
+            name: "教师",
+            salary: 15000
+        },
+        {
+            id: "4",
+            name: "厨师",
+            salary: 10000
+        },
+    ],
+};
+
+module.exports = {
+    ASSET_LIST, 
+    SPECIAL_EVENTS_LIST,
+    ASSET_EVENT_TEMPLATE,
+    GAME_INFO
+};

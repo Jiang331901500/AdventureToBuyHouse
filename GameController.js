@@ -1,11 +1,10 @@
-var PL = require('./Player.js');
-var ASSET = require('./Asset.js');
-var EVENT = require('./Event.js');
-var CONF = require('./conf.js');
 
 class GameController {
     constructor(info) {
-        let conf = CONF;
+        let conf = require('./conf.js');
+        let ASSET = require('./Asset.js');
+        let EVENT = require('./Event.js');
+        let PL = require('./Player.js');
 
         this.mode = info.mode;
         this.player = new PL.Player(info.name, info.age, info.gender, info.career);
@@ -17,7 +16,6 @@ class GameController {
 
     timeFly() {
         let month_pass = Math.floor(Math.random() * 5 + 1);
-        this.player.time += month_pass;
         this.player.work(month_pass);
         return month_pass;
     }
@@ -192,7 +190,7 @@ class GameController {
         }
 
         info.player = this.player.getPlayerInfo();
-        info.assets = {};
+        info.assets = [];
         return info;
     }
 
@@ -205,7 +203,7 @@ class GameController {
         }
 
         // 通知前端游戏结束，返回Player状态和历史事件列表
-        if (false) {
+        if (this.player.getAgeNow() >= 90) {
             this.game_status = 'over';
             info['history'] = this.event_factory.events_history;
             return true;
@@ -215,4 +213,9 @@ class GameController {
     }
 }
 
-module.exports = {GameController};
+function GameInfo() {
+    let conf = require('./conf.js');
+    return conf.GAME_INFO;
+}
+
+module.exports = {GameController, GameInfo};

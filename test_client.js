@@ -17,20 +17,31 @@ var cnt = 0;
 socket.on('playerNextRoundResp', data => {
   console.log('-----------------------------#' + cnt++);
   console.log(data);
+  if (data.game_status === "over") {
+    console.log('-----------------------------#OVER');
+    return ;
+  }
   setTimeout(function() {
     socket.emit('playerNextRound', {});
   }, 5000);
 });
 
-var info = {
-  mode : 'auto',
-  name : 'JJ',
-  age : '22',
-  gender : '男',
-  career : {
-      name : "程序员",
-      salary : 20000
-  },
-};
-socket.emit('playerInfo', info);
+socket.on('gameInfoResp', data => {
+  console.log('-----------------------------GET_OPTIONS');
+  console.log(data);
+  
+  var info = {
+    mode : 'auto',
+    name : 'JJ',
+    age : 32,
+    gender : '男',
+    career : {
+        id: "1",
+        name : "程序员",
+        salary : 20000
+    },
+  };
+  socket.emit('playerInfo', info);
+});
+socket.emit('gameInfo', {});
 
