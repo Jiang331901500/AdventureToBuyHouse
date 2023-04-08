@@ -51,8 +51,9 @@ data = {
     mode : "auto" // auto - 自动模式; Manual - 手动模式
     name : "JJ",
     age : 25,
-    gener : "male",
+    gener : "男",
     career : {
+        id : "1",
         name : "程序员",
         salary : 20000
     }

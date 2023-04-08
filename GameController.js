@@ -6,7 +6,7 @@ class GameController {
         let EVENT = require('./Event.js');
         let PL = require('./Player.js');
 
-        this.mode = info.mode;
+        this.mode = info.mode ? info.mode : 'auto';
         this.player = new PL.Player(info.name, info.age, info.gender, info.career);
         this.asset_factory = new ASSET.AssetFactory(conf);
         conf['all_assets'] = this.asset_factory.public_asset;
@@ -84,6 +84,13 @@ class GameController {
             assets: [],
             player: {}
         };
+
+        // 进度控制
+        if (this.gameTimeControl(info)) {
+            info.player = this.player;
+            return info;
+        }
+
         // event
         let events = this.event_factory.getEvents(this.player);
         for (let event of events) {
@@ -101,14 +108,17 @@ class GameController {
                 }
             }
             if (event.optional === false) {
-                this.event_factory.actEvent(data, event, true);
+                let ev = this.event_factory.actEvent(data, event, true);
+                info.events.push(ev);
+            } else {
+                info.events.push({
+                    id : event.id,
+                    type : event.type,
+                    description : event.getDescription(data),
+                    optional : event.optional,
+                    trigger_time : this.player.time,
+                });
             }
-            info.events.push({
-                id : event.id,
-                type : event.type,
-                description : event.getDescription(data),
-                optional : event.optional,
-            });
         }
         // asset
         let assets = this.asset_factory.getAsset(this.player);
@@ -121,9 +131,6 @@ class GameController {
         }
         // player
         info.player = this.player.getPlayerInfo();
-
-        // 进度控制
-        this.gameTimeControl(info);
         return info;
     }
 
@@ -134,17 +141,23 @@ class GameController {
             let ev = info.events[idx];
             if (ev.optional === true) {
                 let choose = Math.random() > 0.5 ? true : false;
-                let data = {
-                    type : 'choose',
-                    option : choose,
-                    event : {
-                        id : ev.id,
-                        type : ev.type
+                if (choose) {
+                    let data = {
+                        type : 'choose',
+                        option : choose,
+                        event : {
+                            id : ev.id,
+                            type : ev.type
+                        }
+                    };
+                    let ret = this.processPlayerOder(data);
+                    if (ret.request_result === 'ok') {
+                        info.events[idx] = ret.ev_result;
+                    } else {
+                        info.events.splice(idx, 1);
                     }
-                };
-                let ret = this.processPlayerOder(data);
-                if (ret.request_result === 'ok') {
-                    info.events[idx] = ret.ev_result;
+                } else {
+                    info.events.splice(idx, 1);
                 }
             }
         }

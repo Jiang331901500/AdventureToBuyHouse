@@ -141,8 +141,6 @@ class EventFactory {
         let ev = {
             id : event.id,
             type : event.type,
-            weight : event.weight,
-            repeated_time : event.repeated_time,
             trigger_time : event.trigger_time,
             description : event.getDescription(info),
             result : event.getResult(info),

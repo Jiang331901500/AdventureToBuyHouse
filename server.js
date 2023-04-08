@@ -1,7 +1,11 @@
 // server.js
 // 创建一个express应用
 const express = require('express');
+const cors = require('cors');
 const app = express();
+
+// 允许vue跨域访问
+app.use(cors());
 
 // 设置静态文件目录
 app.use(express.static(__dirname + '/public'));
@@ -12,7 +16,7 @@ const server = app.listen(3000, () => {
 });
 
 // 创建一个socket.io实例
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {cors: true});
 var GameController = require('./GameController.js');
 
 // 定义一个玩家类，用来存储玩家的信息和状态
@@ -69,11 +73,12 @@ class GameManager {
     }
     /* 后端为该玩家新生成Player对象，随机产出一些起始属性（如现金），游戏控制器开始工作 */
     handlePlayerInfo(socket, data) {
+        // console.log(data);
         let ret = {
             request_result : 'failed'
         };
         let player = this.findPlayer(socket);
-        if (player) {
+        if (player && data) {
             if (!player.hasOwnProperty('game_controller')) { // 避免控制器重复初始化
                 if (player.initGameController(data)) {
                     ret.request_result = 'ok';
@@ -103,8 +108,10 @@ class GameManager {
         let player = this.findPlayer(socket);
         if (player && player.game_controller) {
             if (player.game_controller.mode === 'manual') { // 手动模式
+                //console.log("handlePlayerNextRound manual");
                 ret = player.game_controller.nextRound();
             } else {    // 自动模式
+                //console.log("handlePlayerNextRound auto");
                 ret = player.game_controller.nextRoundAuto();
             }
         }
